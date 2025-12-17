@@ -48,7 +48,7 @@ apiRouter.post('/users', (req, res) => {
 
 apiRouter.post('/users/:id', (req, res) => { // Update
     const { id } = req.params;
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, username, role, code } = req.body;
     let sql = 'UPDATE wp_eizin_users SET ';
     const params = [];
     const updates = [];
@@ -57,6 +57,9 @@ apiRouter.post('/users/:id', (req, res) => { // Update
     if (email) { updates.push('email = ?'); params.push(email); }
     if (phone) { updates.push('phone = ?'); params.push(phone); }
     if (password) { updates.push('password = ?'); params.push(password); }
+    if (username) { updates.push('username = ?'); params.push(username); }
+    if (role) { updates.push('role = ?'); params.push(role); }
+    if (code) { updates.push('code = ?'); params.push(code); }
 
     if (updates.length === 0) return res.json({ message: 'No changes' });
 

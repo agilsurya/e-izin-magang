@@ -476,6 +476,16 @@ export default function App() {
     }
   };
 
+  const handleAdminUpdateUser = async (updatedUser) => {
+    try {
+      await api.updateUser(updatedUser.id, updatedUser);
+      showNotification('Data pengguna berhasil diperbarui', 'success');
+      loadData();
+    } catch (e) {
+      showNotification('Gagal update user', 'error');
+    }
+  };
+
   // --- Render Login Screen ---
   if (!currentUser) {
     return <LoginView users={users} onLogin={setCurrentUser} showNotification={showNotification} />;
@@ -560,7 +570,7 @@ export default function App() {
             onUpdateMapping={handleUpdateMapping}
             showNotification={showNotification}
             currentUser={currentUser}
-            onUpdateUser={handleUpdateUser}
+            onUpdateUser={handleAdminUpdateUser}
           />
         ) : currentUser.role === 'student' ? (
           <StudentDashboard requests={requests} onSubmit={handleSubmitPermission} mappings={mappings} users={users} showNotification={showNotification} currentUser={currentUser} onUpdateUser={handleUpdateUser} />
