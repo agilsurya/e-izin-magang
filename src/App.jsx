@@ -364,21 +364,38 @@ const DebugBar = ({ currentUser }) => {
   const [ls, setLs] = useState('');
   const [apiUrl] = useState(import.meta.env.VITE_API_URL || 'UNDEFINED');
 
+  const [backendStatus, setBackendStatus] = useState('CHECKING');
+
   useEffect(() => {
     const check = () => {
       const saved = localStorage.getItem('currentUser');
       setLs(saved ? 'PRESENT' : 'EMPTY');
     };
+    const pingBackend = async () => {
+      try {
+        // Ping health check endpoint (root /)
+        // Adjust URL to remove /api/e-izin/v1 part for root check, or just check /users
+        const baseUrl = apiUrl.replace('/api/e-izin/v1', '');
+        const res = await fetch(baseUrl || 'http://localhost:3000');
+        if (res.ok) setBackendStatus('ONLINE 🟢');
+        else setBackendStatus(`ERROR ${res.status} 🔴`);
+      } catch (e) {
+        setBackendStatus('OFFLINE 🔴');
+      }
+    };
+
     check();
-    const interval = setInterval(check, 1000);
+    pingBackend();
+    const interval = setInterval(() => { check(); pingBackend(); }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [apiUrl]);
 
   // if (!currentUser && ls === 'EMPTY') return null; // ALWAYS SHOW FOR DEBUGGING
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-yellow-300 text-black text-[10px] p-1 font-mono z-[100] break-all border-t border-black opacity-90">
-      <b>DEBUG v2:</b> User={currentUser ? currentUser.username : 'NULL'} | Storage={ls} | API={apiUrl}
+    <div className="fixed bottom-0 left-0 w-full bg-yellow-300 text-black text-[10px] p-1 font-mono z-[100] break-all border-t border-black opacity-90 flex justify-between px-2">
+      <span><b>DEBUG v3:</b> User={currentUser ? currentUser.username : 'NULL'} | Storage={ls}</span>
+      <span>API={backendStatus}</span>
     </div>
   );
 };
