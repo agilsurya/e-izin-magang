@@ -374,11 +374,11 @@ const DebugBar = ({ currentUser }) => {
     return () => clearInterval(interval);
   }, []);
 
-  if (!currentUser && ls === 'EMPTY') return null; // Hide if really logged out
+  // if (!currentUser && ls === 'EMPTY') return null; // ALWAYS SHOW FOR DEBUGGING
 
   return (
     <div className="fixed bottom-0 left-0 w-full bg-yellow-300 text-black text-[10px] p-1 font-mono z-[100] break-all border-t border-black opacity-90">
-      <b>DEBUG:</b> User={currentUser ? currentUser.username : 'NULL'} | Storage={ls} | API={apiUrl}
+      <b>DEBUG v2:</b> User={currentUser ? currentUser.username : 'NULL'} | Storage={ls} | API={apiUrl}
     </div>
   );
 };
