@@ -520,7 +520,7 @@ export default function App() {
 
   // --- Render Login Screen ---
   if (!currentUser) {
-    return <LoginView users={users} onLogin={setCurrentUser} showNotification={showNotification} />;
+    return <LoginView users={users} onLogin={handleLogin} showNotification={showNotification} />;
   }
 
   // --- Layout Dashboard ---
