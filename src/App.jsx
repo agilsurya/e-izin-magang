@@ -362,8 +362,13 @@ const LoginView = ({ users, onLogin, showNotification }) => {
 export default function App() {
   // Application State
   const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem('currentUser');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('currentUser');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      console.error("Failed to parse session", e);
+      return null;
+    }
   });
   const [users, setUsers] = useState([]);
   const [requests, setRequests] = useState([]);
