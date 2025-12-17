@@ -1151,6 +1151,24 @@ function StudentDashboard({ requests, onSubmit, mappings, users, showNotificatio
                     showNotification("Tidak dapat mengirim: Dosen/Mitra belum ditentukan admin.", "error");
                     return;
                   }
+
+                  // CEK TANGGAL BERTABRAKAN
+                  const isOverlap = requests.some(r => {
+                    if (r.studentId !== currentUser.id && r.nim !== currentUser.code) return false;
+                    // Cek range tanggal
+                    const startA = new Date(formData.startDate);
+                    const endA = new Date(formData.endDate);
+                    const startB = new Date(r.startDate);
+                    const endB = new Date(r.endDate);
+
+                    return (startA <= endB && endA >= startB);
+                  });
+
+                  if (isOverlap) {
+                    showNotification("Gagal: Anda sudah punya izin di tanggal yang sama!", "error");
+                    return;
+                  }
+
                   submitHandler({ preventDefault: () => { } });
                 }} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-lg shadow-blue-200 transition-all flex justify-center items-center gap-2">
                   <Send size={18} /> Kirim Pengajuan
@@ -1232,7 +1250,7 @@ function StudentDashboard({ requests, onSubmit, mappings, users, showNotificatio
               </div>
             );
           })}
-          {requests.filter(r => r.nim === currentUser.code).length === 0 && (
+          {requests.filter(r => r.studentId === currentUser.id || r.nim === currentUser.code).length === 0 && (
             <div className="text-center py-10 text-gray-500">Belum ada riwayat pengajuan.</div>
           )}
         </div>
