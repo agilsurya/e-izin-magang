@@ -11,6 +11,17 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// Debug Middleware: Log every request
+app.use((req, res, next) => {
+    console.log(`[DEBUG] Incoming Request: ${req.method} ${req.url}`);
+    next();
+});
+
+// Root Route (Health Check)
+app.get('/', (req, res) => {
+    res.send('Backend E-Izin Magang is Running! Time: ' + new Date().toISOString());
+});
+
 const apiRouter = express.Router();
 
 // --- Users ---
