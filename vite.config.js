@@ -5,8 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'wp-plugin/assets',
+    outDir: 'dist',
     emptyOutDir: true,
-    assetsDir: '', // Output assets directly to outDir
   },
 })
