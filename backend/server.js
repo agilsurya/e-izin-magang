@@ -277,3 +277,5 @@ app.use('/api/e-izin/v1', apiRouter);
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+module.exports = app;
