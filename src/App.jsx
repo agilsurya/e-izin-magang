@@ -391,6 +391,33 @@ export default function App() {
     loadData();
   }, [currentUser]); // Reload when user context changes (e.g. login)
 
+  // --- AUTO LOGOUT (5 Minutes Inactivity) ---
+  useEffect(() => {
+    if (!currentUser) return;
+
+    let timeoutId;
+    const TIMEOUT_DURATION = 5 * 60 * 1000; // 5 Minutes
+
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        alert("Sesi Anda telah berakhir karena tidak aktif selama 5 menit.");
+        handleLogout();
+      }, TIMEOUT_DURATION);
+    };
+
+    // Events to track activity
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    events.forEach(event => document.addEventListener(event, resetTimer));
+
+    resetTimer(); // Start timer initially
+
+    return () => {
+      clearTimeout(timeoutId);
+      events.forEach(event => document.removeEventListener(event, resetTimer));
+    };
+  }, [currentUser]);
+
   const showNotification = (msg, type = 'success') => {
     setNotification({ message: msg, type });
   };
