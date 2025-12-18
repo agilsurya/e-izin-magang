@@ -288,8 +288,12 @@ apiRouter.post('/mappings', (req, res) => {
 
 app.use('/api/e-izin/v1', apiRouter);
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Only run server if called directly (Local Dev)
+// In Vercel, we export the app for serverless execution
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
 
 module.exports = app;

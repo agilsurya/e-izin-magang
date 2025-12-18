@@ -14,6 +14,8 @@ const pool = mysql.createPool({
 });
 
 // Test the connection on startup
+// Test the connection on startup - DISABLED FOR VERCEL (Prevent Cold Start Issue)
+/*
 pool.getConnection((err, connection) => {
     if (err) {
         console.error('[DB ERROR] Database connection failed:', err.code);
@@ -23,5 +25,6 @@ pool.getConnection((err, connection) => {
         connection.release();
     }
 });
+*/
 
 module.exports = pool;
