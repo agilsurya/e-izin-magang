@@ -34,7 +34,7 @@ export const api = {
         } catch (e) {
             console.error("Backend Unreachable (getUsers). Error:", e);
             console.warn("Using Mock Data.");
-            return [...MOCK.users]; // Return copy to trigger react updates
+            return MOCK.users.map(u => ({ ...u, isMock: true })); // Return copy to trigger react updates
         }
     },
     createUser: async (userData) => {
@@ -197,7 +197,8 @@ export const api = {
             if (!res.ok) throw new Error('API Error');
             return await res.json();
         } catch (e) {
-            return { ...MOCK.mappings };
+            console.warn("API Error, falling back to mocks");
+            return MOCK.users.map(u => ({ ...u, isMock: true }));
         }
     },
     updateMapping: async (studentId, lecturerId, mentorId) => {

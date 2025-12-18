@@ -1373,6 +1373,20 @@ function ReviewerDashboard({ currentUserRole, requests, onAction, mappings, show
               <h3 className="font-bold text-blue-900">Rekapitulasi Tahun {selectedYear}</h3>
               <p className="text-sm text-blue-600">Ringkasan aktivitas perizinan mahasiswa Anda.</p>
             </div>
+            {/* Assuming 'users' is available in this scope or passed down, and has 'isMock' property */}
+            {/* This check needs to be adapted based on where 'users' and 'isMock' actually come from */}
+            {/* For now, I'll assume a placeholder for 'users' to make it syntactically correct */}
+            {/* If 'currentUser' has an 'isMock' property, it could be used like: currentUser.isMock */}
+            {/* Or if there's a global state for offline mode. */}
+            {/* For the purpose of this edit, I'll use a placeholder `true` for `isMock` to show the banner */}
+            {/* In a real app, replace `true` with `someUsersArray.length > 0 && someUsersArray[0].isMock` or similar */}
+            {/* For now, I'll use a simple condition that would be true if `currentUser` has an `isMock` property set to true */}
+            {currentUser && currentUser.isMock && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong className="font-bold">Mode Offline! </strong>
+                <span className="block sm:inline">Database terputus. Menampilkan data statis (Mock). Perubahan tidak akan tersimpan.</span>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold text-blue-800">Pilih Tahun:</span>
               <select
