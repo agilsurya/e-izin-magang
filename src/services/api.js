@@ -115,7 +115,7 @@ export const api = {
             console.warn("Backend Unreachable. Using Mock Data.");
             await mockDelay();
             const user = MOCK.users.find(u =>
-                (u.username === identifier || u.code === identifier) &&
+                (u.username.toLowerCase() === identifier.toLowerCase() || u.code.toLowerCase() === identifier.toLowerCase()) &&
                 u.password === password
             );
             if (user) return user;
