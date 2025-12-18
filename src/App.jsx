@@ -420,10 +420,15 @@ export default function App() {
   // Load Initial Data
   const loadData = async () => {
     try {
+      // Construct Filter based on Role
+      const reqFilters = {};
+      if (currentUser?.role === 'student') reqFilters.studentId = currentUser.id;
+      if (currentUser?.role === 'lecturer') reqFilters.lecturerId = currentUser.id;
+      if (currentUser?.role === 'mentor') reqFilters.mentorId = currentUser.id;
+
       const [usersData, requestsData, mappingsData] = await Promise.all([
         api.getUsers(),
-        // Pass studentId ONLY if role is student to filtering data on backend
-        api.getRequests(currentUser?.role === 'student' ? currentUser.id : null),
+        api.getRequests(reqFilters),
         api.getMappings()
       ]);
       setUsers(usersData);
@@ -623,7 +628,7 @@ export default function App() {
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
               {currentUser.role === 'admin' ? 'Dashboard Administrator' :
-                currentUser.role === 'student' ? 'Izin Magang Saya (v1.1)' :
+                currentUser.role === 'student' ? 'Izin Magang Saya (v2.0)' :
                   'Validasi Perizinan'}
             </h2>
             <p className="text-gray-500">

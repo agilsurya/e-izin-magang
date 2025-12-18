@@ -18,8 +18,15 @@ app.use((req, res, next) => {
 });
 
 // Root Route (Health Check)
+// Root Route (Health Check + DB Check)
 app.get('/', (req, res) => {
-    res.send('Backend E-Izin Magang is Running! Time: ' + new Date().toISOString());
+    db.query('SELECT 1', (err) => {
+        if (err) {
+            console.error("[HEALTH CHECK] DB Disconnected:", err);
+            return res.status(500).send(`Backend Running, but DB Disconnected: ${err.message}`);
+        }
+        res.send('Backend E-Izin Magang is Running & DB Connected! Time: ' + new Date().toISOString());
+    });
 });
 
 const apiRouter = express.Router();
@@ -109,7 +116,7 @@ apiRouter.post('/login', (req, res) => {
 
 // --- Requests ---
 apiRouter.get('/requests', (req, res) => {
-    const { studentId } = req.query; // Capture filtering param
+    const { studentId, lecturerId, mentorId } = req.query; // Capture filtering param
 
     let sql = `
         SELECT r.id, r.type, r.start_date as startDate, r.end_date as endDate, r.reason,
@@ -118,12 +125,27 @@ apiRouter.get('/requests', (req, res) => {
     u.name as studentName, u.code as nim, u.id as studentId, r.created_at as createdAt
         FROM wp_eizin_requests r
         JOIN wp_eizin_users u ON r.student_id = u.id
+        LEFT JOIN wp_eizin_mappings m ON r.student_id = m.student_id
     `;
 
     const params = [];
+    const conditions = [];
+
     if (studentId) {
-        sql += ' WHERE r.student_id = ?';
+        conditions.push('r.student_id = ?');
         params.push(studentId);
+    }
+    if (lecturerId) {
+        conditions.push('m.lecturer_id = ?');
+        params.push(lecturerId);
+    }
+    if (mentorId) {
+        conditions.push('m.mentor_id = ?');
+        params.push(mentorId);
+    }
+
+    if (conditions.length > 0) {
+        sql += ' WHERE ' + conditions.join(' AND ');
     }
 
     sql += ' ORDER BY r.created_at DESC';

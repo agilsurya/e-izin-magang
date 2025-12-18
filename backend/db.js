@@ -9,7 +9,7 @@ const pool = mysql.createPool({
     password: process.env.DB_PASS || '',
     database: process.env.DB_NAME || 'e_izin_magang',
     waitForConnections: true,
-    connectionLimit: 1,
+    connectionLimit: 5,
     queueLimit: 0
 });
 

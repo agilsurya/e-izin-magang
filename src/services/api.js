@@ -112,26 +112,45 @@ export const api = {
     },
 
     // --- Requests ---
-    getRequests: async (studentId = null) => {
+    getRequests: async (filters = {}) => {
+        const { studentId, lecturerId, mentorId } = filters;
         try {
-            const url = studentId ? `${API_BASE_URL}/requests?studentId=${studentId}` : `${API_BASE_URL}/requests`;
+            const params = new URLSearchParams();
+            if (studentId) params.append('studentId', studentId);
+            if (lecturerId) params.append('lecturerId', lecturerId);
+            if (mentorId) params.append('mentorId', mentorId);
+
+            const url = `${API_BASE_URL}/requests?${params.toString()}`;
+
             const res = await fetch(url, { headers: HEADERS });
             if (!res.ok) throw new Error('API Error');
             const data = await res.json();
 
-            // SECURITY: Client-side Filter Enforcement
-            // Even if backend returns everything, we slice it here.
+            // SECURITY: Client-side Filter Enforcement (Student Only)
             if (studentId) {
                 return data.filter(r => String(r.studentId) === String(studentId));
             }
+            // Note: Client-side filtering for Lecturer/Mentor requires Mapping data which api.js doesn't have access to easily.
+            // We rely on backend filtering for them, plus App.js UI filtering.
+
             return data;
         } catch (e) {
             console.warn("API Error, falling back to mocks filtered");
             // MOCK FALLBACK
+            let mockData = [...MOCK.requests];
             if (studentId) {
-                return MOCK.requests.filter(r => String(r.studentId) === String(studentId));
+                mockData = mockData.filter(r => String(r.studentId) === String(studentId));
             }
-            return [...MOCK.requests];
+            if (lecturerId) {
+                // Mock mapping check logic (simplified)
+                const studentIds = Object.keys(MOCK.mappings).filter(sid => MOCK.mappings[sid].lecturerId === lecturerId);
+                mockData = mockData.filter(r => studentIds.includes(String(r.studentId)));
+            }
+            if (mentorId) {
+                const studentIds = Object.keys(MOCK.mappings).filter(sid => MOCK.mappings[sid].mentorId === mentorId);
+                mockData = mockData.filter(r => studentIds.includes(String(r.studentId)));
+            }
+            return mockData;
         }
     },
     createRequest: async (reqData) => {
