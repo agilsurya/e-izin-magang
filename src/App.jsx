@@ -1190,7 +1190,7 @@ function StudentDashboard({ requests, onSubmit, mappings, users, showNotificatio
               <FileSpreadsheet size={16} /> Export Excel
             </button>
           </div>
-          {requests.filter(r => r.studentId === currentUser.id || r.nim === currentUser.code).map((req) => {
+          {requests.filter(r => String(r.studentId) === String(currentUser.id)).map((req) => {
             const status = getOverallStatus(req);
             const isApproved = status === 'Approved';
 
