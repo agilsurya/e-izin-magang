@@ -12,7 +12,19 @@ const MOCK = {
         { id: 1, name: 'Administrator', username: 'admin', role: 'admin', code: 'ADM001', password: 'admin' },
         { id: 2, name: 'Budi Mahasiswa', username: 'student', role: 'student', code: '2023001', password: 'student' },
         { id: 3, name: 'Dr. Dosen', username: 'lecturer', role: 'lecturer', code: 'NIP001', password: 'lecturer' },
-        { id: 4, name: 'PT. Mitra', username: 'mentor', role: 'mentor', code: 'MITRA001', password: 'mentor' }
+        { id: 4, name: 'PT. Mitra', username: 'mentor', role: 'mentor', code: 'MITRA001', password: 'mentor' },
+        // REAL DB USERS SYNC
+        { id: 5, name: 'agil', username: 'agil', role: 'student', code: '123', password: 'agil' },
+        { id: 6, name: 'yanto', username: 'yanto', role: 'mentor', code: 'yanto', password: 'yano' },
+        { id: 7, name: 'santi', username: 'santi', role: 'student', code: '123', password: 'santi3' },
+        { id: 8, name: 'apro', username: 'apro', role: 'lecturer', code: '123', password: 'APRO1' },
+        { id: 9, name: 'adit', username: 'adit', role: 'mentor', code: '123', password: 'adit' },
+        { id: 10, name: 'Nisa Kamila', username: 'nisakamila', role: 'student', code: '258', password: 'nisakamila' },
+        { id: 11, name: 'Tika Ainunnisa Fitria', username: 'tika', role: 'lecturer', code: '256', password: 'tika' },
+        { id: 12, name: 'Budi Putra', username: 'budiputra', role: 'mentor', code: 'PT Sun Indo', password: 'budiputra' },
+        { id: 13, name: 'arga', username: 'arga', role: 'student', code: '125', password: 'arga' },
+        { id: 14, name: 'Hendratmo', username: 'hendratmo', role: 'lecturer', code: '123', password: 'hendratmo' },
+        { id: 15, name: 'sakti', username: 'sakti', role: 'mentor', code: 'PT Lima Sisi', password: 'sakti' }
     ],
     requests: [
         { id: 101, studentId: 2, studentName: 'Budi Mahasiswa', type: 'Sakit', startDate: '2025-01-10', endDate: '2025-01-12', reason: 'Demam tinggi (Mock)', attachmentUrl: null, lecturerStatus: 'Approved', mentorStatus: 'Pending' }
