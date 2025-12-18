@@ -117,8 +117,20 @@ export const api = {
             const url = studentId ? `${API_BASE_URL}/requests?studentId=${studentId}` : `${API_BASE_URL}/requests`;
             const res = await fetch(url, { headers: HEADERS });
             if (!res.ok) throw new Error('API Error');
-            return await res.json();
+            const data = await res.json();
+
+            // SECURITY: Client-side Filter Enforcement
+            // Even if backend returns everything, we slice it here.
+            if (studentId) {
+                return data.filter(r => String(r.studentId) === String(studentId));
+            }
+            return data;
         } catch (e) {
+            console.warn("API Error, falling back to mocks filtered");
+            // MOCK FALLBACK
+            if (studentId) {
+                return MOCK.requests.filter(r => String(r.studentId) === String(studentId));
+            }
             return [...MOCK.requests];
         }
     },

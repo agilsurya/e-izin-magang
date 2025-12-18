@@ -623,7 +623,7 @@ export default function App() {
           <div>
             <h2 className="text-2xl font-bold text-gray-800">
               {currentUser.role === 'admin' ? 'Dashboard Administrator' :
-                currentUser.role === 'student' ? 'Izin Magang Saya' :
+                currentUser.role === 'student' ? 'Izin Magang Saya (v1.1)' :
                   'Validasi Perizinan'}
             </h2>
             <p className="text-gray-500">
