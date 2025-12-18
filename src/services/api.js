@@ -112,9 +112,10 @@ export const api = {
     },
 
     // --- Requests ---
-    getRequests: async () => {
+    getRequests: async (studentId = null) => {
         try {
-            const res = await fetch(`${API_BASE_URL}/requests`, { headers: HEADERS });
+            const url = studentId ? `${API_BASE_URL}/requests?studentId=${studentId}` : `${API_BASE_URL}/requests`;
+            const res = await fetch(url, { headers: HEADERS });
             if (!res.ok) throw new Error('API Error');
             return await res.json();
         } catch (e) {

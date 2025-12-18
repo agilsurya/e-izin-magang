@@ -109,16 +109,26 @@ apiRouter.post('/login', (req, res) => {
 
 // --- Requests ---
 apiRouter.get('/requests', (req, res) => {
-    const sql = `
+    const { studentId } = req.query; // Capture filtering param
+
+    let sql = `
         SELECT r.id, r.type, r.start_date as startDate, r.end_date as endDate, r.reason,
     r.attachment_url as attachmentUrl, r.lecturer_status as lecturerStatus, r.mentor_status as mentorStatus,
     r.lecturer_comment as lecturerComment, r.mentor_comment as mentorComment, r.approved_at as approvedAt,
     u.name as studentName, u.code as nim, u.id as studentId, r.created_at as createdAt
         FROM wp_eizin_requests r
         JOIN wp_eizin_users u ON r.student_id = u.id
-        ORDER BY r.created_at DESC
     `;
-    db.query(sql, (err, results) => {
+
+    const params = [];
+    if (studentId) {
+        sql += ' WHERE r.student_id = ?';
+        params.push(studentId);
+    }
+
+    sql += ' ORDER BY r.created_at DESC';
+
+    db.query(sql, params, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });

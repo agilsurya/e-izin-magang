@@ -422,7 +422,8 @@ export default function App() {
     try {
       const [usersData, requestsData, mappingsData] = await Promise.all([
         api.getUsers(),
-        api.getRequests(),
+        // Pass studentId ONLY if role is student to filtering data on backend
+        api.getRequests(currentUser?.role === 'student' ? currentUser.id : null),
         api.getMappings()
       ]);
       setUsers(usersData);
