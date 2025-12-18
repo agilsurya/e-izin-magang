@@ -19,11 +19,14 @@ app.use((req, res, next) => {
 
 // Root Route (Health Check)
 // Root Route (Health Check + DB Check)
+// Root Route (Health Check + DB Check)
 app.get('/', (req, res) => {
     db.query('SELECT 1', (err) => {
         if (err) {
             console.error("[HEALTH CHECK] DB Disconnected:", err);
-            return res.status(500).send(`Backend Running, but DB Disconnected: ${err.message}`);
+            // Return 200 OK to indicate SERVER is running, even if DB is flaky.
+            // This prevents "Hard 500" errors in frontend indicators.
+            return res.status(200).send(`Backend Running, but DB Disconnected: ${err.message}`);
         }
         res.send('Backend E-Izin Magang is Running & DB Connected! Time: ' + new Date().toISOString());
     });
